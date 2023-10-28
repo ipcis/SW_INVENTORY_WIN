@@ -24,3 +24,12 @@ Different code to extract SW inventory informations
    50  cat uniq_vendor_2022.txt | grep wireguard
    51  cat uniq_vendor_2022.txt | grep vs_codecover
 ```
+
+
+folgendes fehlt noch:
+
+- einige programme sind im wmic nicht drin: koennte mit exe search nachgebessert werden
+- oben in der json sollte der hostname, os und os build number rein
+- os buildnumber sollte cve check durchgefuehrt werden und eol check
+- cve output sollte als json erfolgen
+- 
