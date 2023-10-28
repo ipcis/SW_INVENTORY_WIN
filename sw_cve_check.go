@@ -45,7 +45,7 @@ func main() {
 	for _, match := range matches {
 		info := SoftwareInfo{
 			Name:        match[1],
-			Version:     match[2],
+			Version:     strings.TrimSpace(match[2]),
 			InstallDate: match[3],
 		}
 		softwareList = append(softwareList, info)
@@ -53,8 +53,9 @@ func main() {
 		nameLowerCase := strings.ToLower(info.Name)
 		if isNameInVendorList(nameLowerCase, vendorData) {
 			fmt.Printf("Gesuchter Produktname: %s - Match: Ja\n", info.Name)
-			bodystring := fetchCVEInfo(info.Name)
-			fmt.Println(bodystring) // Gibt den Body-Inhalt auf der Konsole aus
+			//bodystring := fetchCVEInfo(info.Name)
+			bodystring := fetchCVEInfo(nameLowerCase, info.Version) // Pass both name and version
+			fmt.Println(bodystring)                                 // Gibt den Body-Inhalt auf der Konsole aus
 		}
 	}
 
@@ -83,8 +84,8 @@ func isNameInVendorList(name string, vendorData []byte) bool {
 	return false
 }
 
-func fetchCVEInfo(name string) string {
-	cveURL := "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=" + name
+func fetchCVEInfo(name, version string) string {
+	cveURL := "https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=" + name + "%20" + version
 	resp, err := http.Get(cveURL)
 	if err != nil {
 		// Handle error
@@ -108,6 +109,4 @@ func fetchCVEInfo(name string) string {
 	}
 
 	return prettyJSON.String()
-
-	//return bodyString
 }
