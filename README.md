@@ -26,6 +26,12 @@ Different code to extract SW inventory informations
 ```
 
 
+```
+Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
+```
+
+
+
 folgendes fehlt noch:
 
 - einige programme sind im wmic nicht drin: koennte mit exe search nachgebessert werden
