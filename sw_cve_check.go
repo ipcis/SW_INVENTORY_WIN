@@ -9,7 +9,12 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
+
+	"embed"
 )
+
+//go:embed uniq_vendor.txt
+var vendorData embed.FS
 
 type SoftwareInfo struct {
 	Name        string `json:"Name"`
@@ -25,6 +30,7 @@ type CVE struct {
 }
 
 func main() {
+
 	cmd := exec.Command("powershell", "Get-WmiObject -Class Win32_Product | Select-Object Name, Version, InstallDate")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -35,7 +41,7 @@ func main() {
 	re := regexp.MustCompile(`(?P<Name>.+?)\s+(?P<Version>(\d+(\.\d+)*)\s+)\s+(?P<InstallDate>.+)`)
 	matches := re.FindAllStringSubmatch(string(output), -1)
 
-	vendorData, err := ioutil.ReadFile("uniq_vendor.txt")
+	vendorData, err := vendorData.ReadFile("uniq_vendor.txt")
 	if err != nil {
 		fmt.Printf("Fehler beim Lesen der Datei 'uniq_vendor.txt': %v\n", err)
 		return
